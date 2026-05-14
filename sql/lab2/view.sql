@@ -4,10 +4,9 @@ select
     t.title,
     c.client_name,
     c.client_age,
-    s.status_name
+    t.status
 from tickets t
-         join clients c on t.client_id = c.id
-         join status s on t.status_id = s.id;
+         join clients c on t.client_id = c.id;
 
 create or replace view agent_ticket_stats as
 select
@@ -15,25 +14,24 @@ select
     count(t.id) as ticket_count
 from agents a
          left join tickets t on a.id = t.agent_id
-group by a.agent_name;
+group by a.id, a.agent_name;
 
 create or replace view unassigned_tickets as
 select
     t.id,
     t.title,
     c.client_name,
-    s.status_name,
+    t.status,
     t.created_at
 from tickets t
-join clients c on t.client_id = c.id
-join status s on t.status_id = s.id
-where status_name = 'открыт';
+         join clients c on t.client_id = c.id
+where t.status = 'открыт' and t.agent_id is null;
 
 select * from ticket_info
 order by client_age;
 
 select * from ticket_info
-where status_name = 'решен'
+where status = 'решен'
 order by title;
 
 select * from agent_ticket_stats

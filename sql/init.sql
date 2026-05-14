@@ -4,3 +4,6 @@
 \i /docker-entrypoint-initdb.d/lab2/agregation.sql
 \i /docker-entrypoint-initdb.d/lab2/join.sql
 \i /docker-entrypoint-initdb.d/lab2/view.sql
+\i /docker-entrypoint-initdb.d/lab3/funcs-and-props.sql
+\i /docker-entrypoint-initdb.d/lab3/triggers.sql
+\i /docker-entrypoint-initdb.d/lab3/func-test.sql

@@ -1,26 +1,18 @@
-select s.status_name, count(*)
+select t.status, count(*)
 from tickets t
-join status s on t.status_id = s.id
-group by s.status_name
+group by t.status
 having count(*) > 1;
 
-select s.status_name, avg(c.client_age) as avg_age
+select t.status, avg(c.client_age) as avg_age
 from tickets t
-join status s on t.status_id = s.id
 join clients c on t.client_id = c.id
-group by s.status_name
+group by t.status
 order by avg_age;
 
-select s.status_name, min(c.client_age) as min_age
+select t.status,
+       min(c.client_age) as min_age,
+       max(c.client_age) as max_age
 from tickets t
-join status s on t.status_id = s.id
-join clients c on t.client_id = c.id
-group by s.status_name
+         join clients c on t.client_id = c.id
+group by t.status
 order by min_age;
-
-select s.status_name, max(c.client_age) as max_age
-from tickets t
-join status s on t.status_id = s.id
-join clients c on t.client_id = c.id
-group by s.status_name
-order by max_age;
