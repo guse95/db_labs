@@ -14,7 +14,7 @@ analyze tickets;
 explain analyze
 select *
 from tickets
-where agent_id = 10
-  and status = 'в работе';
+order by created_at desc
+    limit 100;
 
 drop index if exists idx_tickets_created_at;
