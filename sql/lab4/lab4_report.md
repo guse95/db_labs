@@ -39,6 +39,15 @@
 
 ## 1. Сложный фильтр
 
+## SQL запрос
+
+```sql
+select *
+from tickets
+where status = 'открыт'
+  and created_at > now() - interval '30 days';
+```
+
 ## Гипотеза
 
 Составной индекс `(status, created_at)` должен ускорить выполнение запроса, 
@@ -78,6 +87,15 @@ PostgreSQL заменил `Seq Scan` на `Bitmap Index Scan`,
 
 ## 2. ORDER BY и LIMIT
 
+## SQL запрос
+
+```sql
+select *
+from tickets
+order by created_at desc
+    limit 100;
+```
+
 ## Гипотеза
 
 Индекс по `created_at` должен ускорить сортировку и выборку первых строк.
@@ -87,7 +105,7 @@ PostgreSQL заменил `Seq Scan` на `Bitmap Index Scan`,
 ```text
 Parallel Seq Scan
 Sort Method: top-N heapsort
-Execution Time: 52.336 ms
+Execution Time: 50.263 ms
 ```
 
 PostgreSQL выполнил полное сканирование таблицы с последующей сортировкой.
@@ -96,14 +114,14 @@ PostgreSQL выполнил полное сканирование таблицы
 
 ```text
 Parallel Seq Scan
-Execution Time: 29.825 ms
+Execution Time: 0.191 ms
 ```
 
 ## Результат
 
 | Без индекса | С индексом |
-| ----------- | ---------- |
-| 52.336 ms   | 29.825 ms  |
+| ----------- |------------|
+| 50.263 ms   | 0.191 ms   |
 
 ## Вывод
 
@@ -112,6 +130,15 @@ Execution Time: 29.825 ms
 поскольку выборка затрагивала большое количество строк.
 
 ## 3. Альтернативные варианты индексирования
+
+## SQL запрос
+
+```sql
+select *
+from tickets
+where agent_id = 10
+  and status = 'в работе';
+```
 
 ## Гипотеза
 
@@ -156,6 +183,14 @@ Execution Time: 0.047 ms
 
 ## 4. Текстовый поиск
 
+## SQL запрос
+
+```sql
+select *
+from tickets
+where description like '%ошибка%';
+```
+
 ## Гипотеза
 
 GIN-индекс с расширением `pg_trgm` должен ускорить поиск подстроки.
@@ -190,6 +225,19 @@ PostgreSQL перестал выполнять полное сканирован
 начал использовать индексный поиск с разбиением на триграммы.
 
 ## 5. JOIN-запрос
+
+## SQL запрос
+
+```sql
+select
+    t.id,
+    c.client_name,
+    a.agent_name
+from tickets t
+         join clients c on c.id = t.client_id
+         join agents a on a.id = t.agent_id
+where t.status = 'решен';
+```
 
 ## Гипотеза
 
@@ -230,6 +278,14 @@ Execution Time: 154.700 ms
 
 ## 6. Негативный сценарий
 
+## SQL запрос
+
+```sql
+select *
+from tickets
+where status != 'закрыт';
+```
+
 ## Гипотеза
 
 Индекс по `status` не будет использоваться, поскольку запрос возвращает большую часть таблицы.
@@ -260,6 +316,44 @@ PostgreSQL полностью проигнорировал индекс и пр�
 Это связано с низкой селективностью условия: `800099`.
 
 ## Исследование влияния индексов на INSERT/UPDATE
+
+## SQL запрос
+
+### Insert
+```sql
+insert into tickets (
+    title,
+    description,
+    client_id,
+    agent_id,
+    status,
+    created_at
+)
+select
+    'Ticket #' || i,
+    CASE
+        WHEN random() < 0.01
+            THEN 'критическая ошибка сервера'
+        ELSE 'обычный текст'
+        END || i,
+    floor(random() * 100000 + 1)::int,
+    floor(random() * 1000 + 1)::int,
+    CASE
+        WHEN random() < 0.80 THEN 'закрыт'
+        WHEN random() < 0.95 THEN 'решен'
+        WHEN random() < 0.99 THEN 'в работе'
+        ELSE 'открыт'
+        END,
+    now() - (random() * interval '365 days')
+from generate_series(1, 500000) s(i);
+```
+
+### Update
+```sql
+update tickets
+set status = 'закрыт'
+where status = 'открыт';
+```
 
 ## Гипотеза
 
