@@ -14,3 +14,4 @@
 \i /docker-entrypoint-initdb.d/lab4/text-search.sql
 \i /docker-entrypoint-initdb.d/lab4/join.sql
 \i /docker-entrypoint-initdb.d/lab4/negative-test.sql
+\i /docker-entrypoint-initdb.d/lab4/update.sql
