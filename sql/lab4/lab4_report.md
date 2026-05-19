@@ -65,6 +65,12 @@ Execution Time: 46.508 ms
 
 PostgreSQL выполнил последовательное сканирование таблицы.
 
+## Индекс
+
+```sql
+create index idx_tickets_status_created on tickets(status, created_at);
+```
+
 ## План выполнения после индекса
 
 ```text
@@ -110,6 +116,12 @@ Execution Time: 50.263 ms
 
 PostgreSQL выполнил полное сканирование таблицы с последующей сортировкой.
 
+## Индекс
+
+```sql
+create index idx_tickets_created_at on tickets(created_at desc);
+```
+
 ## План выполнения после индекса
 
 ```text
@@ -151,12 +163,24 @@ Parallel Seq Scan
 Execution Time: 31.586 ms
 ```
 
+## Индекс
+
+```sql
+create index idx_agent on tickets(agent_id);
+```
+
 ## План выполнения с индексом `idx_agent`
 
 ```text
 Bitmap Heap Scan
 Bitmap Index Scan on idx_agent
 Execution Time: 1.596 ms
+```
+
+## Индекс
+
+```sql
+create index idx_agent_status on tickets(agent_id, status);
 ```
 
 ## План выполнения с индексом `idx_agent_status`
@@ -202,7 +226,13 @@ Parallel Seq Scan
 Execution Time: 57.540 ms
 ```
 
-## Созданный индекс
+## Индекс
+
+```sql
+create extension if not exists pg_trgm;
+create index idx_trgm on tickets
+    using gin (description gin_trgm_ops);
+```
 
 ## План выполнения после индекса
 
@@ -253,6 +283,16 @@ Seq Scan on agents
 Execution Time: 175.493 ms
 ```
 
+## Индексы
+
+```sql
+create index idx_tickets_client on tickets(client_id);
+
+create index idx_tickets_agent on tickets(agent_id);
+
+create index idx_tickets_status on tickets(status);
+```
+
 ## План выполнения после индексов
 
 ```text
@@ -295,6 +335,12 @@ where status != 'закрыт';
 ```text
 Seq Scan
 Execution Time: 96.305 ms
+```
+
+## Индекс   
+
+```sql
+create index idx_tickets_status on tickets(status);
 ```
 
 ## План выполнения после индекса
@@ -367,6 +413,16 @@ Seq Scan
 Execution Time: 21330.332 ms
 ```
 
+## Индексы
+
+```sql
+create index idx_tickets_status on tickets(status);
+
+create index idx_tickets_agent on tickets(agent_id);
+
+create index idx_tickets_created_at on tickets(created_at);
+```
+
 ## План выполнения после индекса для insert
 
 ```text
@@ -379,6 +435,12 @@ Execution Time: 58631.763 ms
 ```text
 Seq Scan
 Execution Time: 95.755 ms
+```
+
+## Индекс
+
+```sql
+create index idx_tickets_status on tickets(status);
 ```
 
 ## План выполнения после индекса для update
@@ -397,14 +459,12 @@ Execution Time: 40891.644 ms
 
 ## Вывод
 
-## Вывод
-
 Наличие индексов значительно замедлило операции `INSERT` и `UPDATE`. 
 Это связано с тем, что PostgreSQL при изменении данных дополнительно обновляет 
 все связанные индексные структуры, что особенно заметно при обработке большого количества строк.
 
 
-## Общий вывод
+# Общий вывод
 
 В ходе лабораторной работы было установлено, 
 что индексы существенно ускоряют выполнение селективных запросов, особенно в случаях, 
