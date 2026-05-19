@@ -7,11 +7,27 @@
 -- \i /docker-entrypoint-initdb.d/lab3/funcs-and-props.sql
 -- \i /docker-entrypoint-initdb.d/lab3/triggers.sql
 -- \i /docker-entrypoint-initdb.d/lab3/func-test.sql
-\i /docker-entrypoint-initdb.d/lab4/generate-mock-data.sql
-\i /docker-entrypoint-initdb.d/lab4/complex-filter.sql
-\i /docker-entrypoint-initdb.d/lab4/sort-with-limit.sql
-\i /docker-entrypoint-initdb.d/lab4/alternative-indexing.sql
-\i /docker-entrypoint-initdb.d/lab4/text-search.sql
-\i /docker-entrypoint-initdb.d/lab4/join.sql
-\i /docker-entrypoint-initdb.d/lab4/negative-test.sql
-\i /docker-entrypoint-initdb.d/lab4/update.sql
+
+-- \i /docker-entrypoint-initdb.d/lab4/generate-mock-data.sql
+-- \i /docker-entrypoint-initdb.d/lab4/complex-filter.sql
+-- \i /docker-entrypoint-initdb.d/lab4/sort-with-limit.sql
+-- \i /docker-entrypoint-initdb.d/lab4/alternative-indexing.sql
+-- \i /docker-entrypoint-initdb.d/lab4/text-search.sql
+-- \i /docker-entrypoint-initdb.d/lab4/join.sql
+-- \i /docker-entrypoint-initdb.d/lab4/negative-test.sql
+-- \i /docker-entrypoint-initdb.d/lab4/update.sql
+
+\i /docker-entrypoint-initdb.d/lab5/insert.sql
+-- \i /docker-entrypoint-initdb.d/lab5/set-agent-query/success.sql
+-- \i /docker-entrypoint-initdb.d/lab5/set-agent-query/rollback.sql
+-- \i /docker-entrypoint-initdb.d/lab5/set-agent-query/savepoint.sql
+-- \i /docker-entrypoint-initdb.d/lab5/knowledge-to-ticket-query/success.sql
+-- \i /docker-entrypoint-initdb.d/lab5/knowledge-to-ticket-query/rollback.sql
+-- \i /docker-entrypoint-initdb.d/lab5/knowledge-to-ticket-query/savepoint.sql
+-- \i /docker-entrypoint-initdb.d/lab5/close-ticket-query/success.sql
+-- \i /docker-entrypoint-initdb.d/lab5/close-ticket-query/rollback.sql
+-- \i /docker-entrypoint-initdb.d/lab5/close-ticket-query/savepoint.sql
+-- \i /docker-entrypoint-initdb.d/lab5/parallel/blocking.sql
+-- \i /docker-entrypoint-initdb.d/lab5/parallel/read-commit.sql
+-- \i /docker-entrypoint-initdb.d/lab5/parallel/repeatable-read.sql
+-- \i /docker-entrypoint-initdb.d/lab5/parallel/serializable.sql
