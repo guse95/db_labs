@@ -1,4 +1,17 @@
 services:
+  backend:
+    build: sql/lab6
+    command: "uvicorn app.main:app --reload --host 0.0.0.0 --port 8000"
+    volumes:
+      - ./sql/lab6/:/usr/sql/lab6/app/
+    ports:
+      - "8002:8000"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+
   db:
     image: postgres:17
     ports:
@@ -10,6 +23,11 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./sql:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   pgdata:
