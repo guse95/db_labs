@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
-from app.api import ping
+from app.api import ping, clients
 from app.db import engine
 
 from fastapi import FastAPI
@@ -26,3 +26,4 @@ app.add_middleware(
 )
 
 app.include_router(ping.router)
+app.include_router(clients.router, prefix="/clients")

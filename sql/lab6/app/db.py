@@ -28,14 +28,6 @@ class Clients(Base):
     client_age: Mapped[int] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
 
-    operations: Mapped[list["OperationHistory"]] = relationship(
-        back_populates="booker"
-    )
-
-    sessions: Mapped[list["Sessions"]] = relationship(
-        back_populates="user"
-    )
-
 
 class Agents(Base):
     __tablename__ = "agents"
