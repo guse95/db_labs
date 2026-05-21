@@ -321,7 +321,7 @@ where status != 'закрыт';
 ## План выполнения без индекса
 
 ```text
-Seq Scan
+Parallel Seq Scan
 Execution Time: 96.305 ms
 ```
 
@@ -334,7 +334,7 @@ create index idx_tickets_status on tickets(status);
 ## План выполнения после индекса
 
 ```text
-Seq Scan
+Parallel Seq Scan
 Execution Time: 103.970 ms
 ```
 

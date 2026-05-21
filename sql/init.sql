@@ -17,7 +17,7 @@
 -- \i /docker-entrypoint-initdb.d/lab4/negative-test.sql
 -- \i /docker-entrypoint-initdb.d/lab4/update.sql
 
-\i /docker-entrypoint-initdb.d/lab5/insert.sql
+-- \i /docker-entrypoint-initdb.d/lab5/insert.sql
 -- \i /docker-entrypoint-initdb.d/lab5/set-agent-query/success.sql
 -- \i /docker-entrypoint-initdb.d/lab5/set-agent-query/rollback.sql
 -- \i /docker-entrypoint-initdb.d/lab5/set-agent-query/savepoint.sql
