@@ -8,8 +8,6 @@ update tickets
 set status = 'ошибка'
 where id = 1;
 
-commit;
-
 rollback;
 
 select agent_id, status

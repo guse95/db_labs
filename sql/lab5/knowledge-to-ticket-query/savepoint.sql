@@ -14,6 +14,6 @@ rollback to savepoint kb_insert;
 insert into knowledge_for_ticket(ticket_id, knowledge_id)
 values (1, 1);
 
-COMMIT;
+commit;
 
 select * from knowledge_for_ticket;
