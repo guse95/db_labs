@@ -8,8 +8,12 @@ return new;
 end;
 $$ language plpgsql;
 
-create trigger trg_check_client_age
+create trigger trg_check_client_age_insert
     before insert on public.clients
+    for each row execute function check_client_before_insert();
+
+create trigger trg_check_client_age_update
+    before update on public.clients
     for each row execute function check_client_before_insert();
 
 

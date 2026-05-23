@@ -32,4 +32,13 @@ exception
 end;
 $$ language plpgsql;
 
+CREATE OR REPLACE FUNCTION close_ticket(ticket_id integer)
+RETURNS void AS
+$$
+BEGIN
+    UPDATE tickets
+    SET status = 'закрыт'
+    WHERE id = ticket_id;
+END;
+$$ LANGUAGE plpgsql;
 
