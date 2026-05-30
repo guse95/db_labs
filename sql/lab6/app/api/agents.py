@@ -12,14 +12,14 @@ async def get_agents(
     page: int = 1,
     limit: int = 10,
     sort: str = "id",
-    order: str = "asc",
+    is_desc_order: bool | None = False,
     db: AsyncSession = Depends(get_db)
 ):
     query = select(Agents)
 
-    if order == "desc":
+    if is_desc_order:
         query = query.order_by(getattr(Agents, sort).desc())
-    else:
+    elif is_desc_order == False:
         query = query.order_by(getattr(Agents, sort).asc())
 
     query = query.offset((page - 1) * limit).limit(limit)

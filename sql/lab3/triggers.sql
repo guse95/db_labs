@@ -1,10 +1,16 @@
 create or replace function check_client_before_insert()
 returns trigger as $$
 begin
+    if new.client_age == null then
+        raise exception 'Введите возраст.';
+    end if;
+    if new.client_age < 0 then
+        raise exception 'Невалидный возраст для клиента %. Возраст не может быть ниже нуля.', new.client_name;
+    end if;
     if new.client_age < 18 then
         raise exception 'Клиент % слишком молод. Регистрация доступна только с 18 лет.', new.client_name;
-end if;
-return new;
+    end if;
+    return new;
 end;
 $$ language plpgsql;
 
